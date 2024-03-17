@@ -1,44 +1,40 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+// CountryDetails.tsx
+import React from 'react';
 
-export default function Body(){
-    const [userLocation, setUserLocation] = useState<GeolocationPosition | null>(null);
-    const [countryData, setCountryData] = useState<any[]>([]);
+interface CountryDetailsProps {
+  country: any; // Replace 'any' with the type of your country details
+}
 
-    useEffect(() => {
-        if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            setUserLocation(position);
-            fetchCountryData();
-        });
-        } else {
-        console.log('Geolocation is not supported by this browser.');
-        }
-    }, []);
+const CountryDetails: React.FC<CountryDetailsProps> = ({ country }) => {
+  if (!country) {
+    return <div>No country details available</div>;
+  }
 
-    const fetchCountryData = async () => {
-        try {
-            const response = await axios.get('https://restcountries.com/v3.1/all');
-            setCountryData(response.data);
-        } catch (error) {
-            console.error('Failed to fetch country data:', error);
-        }
-    };
+  const { name, capital, population, languages, flags } = country[0];
 
-    return (
-        <div>
-        {userLocation && (
-            <p>
-            Your current latitude is {userLocation.coords.latitude} and longitude is {userLocation.coords.longitude}.
-            </p>
-        )}
-        <h2>Country Data</h2>
-        <ul>
-            {countryData.map((country: any, index) => (
-            <li key={index}>{country.name.common}</li>
-            ))}
-        </ul>
-        </div>
-    );
+  return (
+    <div className="container mt-4">
+      <h2>Country Details</h2>
+      <div>
+        <img src={flags.svg} alt={`${name.common} Flag`} style={{ width: '100px' }} />
+      </div>
+      <div>
+        <strong>Name:</strong> {name.common}
+      </div>
+      <div>
+        <strong>Capital:</strong> {capital}
+      </div>
+      <div>
+        <strong>Population:</strong> {population}
+      </div>
+      <div>
+        <strong>Languages:</strong>{' '}
+        {Object.values(languages)
+          .map((language: any) => language)
+          .join(', ')}
+      </div>
+    </div>
+  );
 };
 
+export default CountryDetails;
