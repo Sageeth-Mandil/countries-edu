@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchCountryDetails } from './CountryDetails';
 import { motion } from 'framer-motion'; // Import motion from framer-motion
-import CountryDetails from './Body';
+import CountryDetails from './body/Body';
 
 const Header: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState<string>('');
@@ -66,7 +66,7 @@ const Header: React.FC = () => {
     };
 
     return (
-        <div className="container my-4">
+        <div className="container-fluid my-4 full-width-image" id="container">
             <div className="row">
                 <div className="col-lg-8 offset-lg-2">
                     <h1 className="text-center mb-4 display-4 fw-bold">Explore Countries</h1>
