@@ -7,31 +7,21 @@ interface CountryDetailsProps {
 
 const CountryDetails: React.FC<CountryDetailsProps> = ({ country }) => {
   if (!country) {
-    return <div>No country details available</div>;
+    return null;
   }
 
   const { name, capital, population, languages, flags } = country[0];
 
   return (
-    <div className="container mt-4">
-      <h2>Country Details</h2>
-      <div>
-        <img src={flags.svg} alt={`${name.common} Flag`} style={{ width: '100px' }} />
-      </div>
-      <div>
-        <strong>Name:</strong> {name.common}
-      </div>
-      <div>
-        <strong>Capital:</strong> {capital}
-      </div>
-      <div>
-        <strong>Population:</strong> {population}
-      </div>
-      <div>
-        <strong>Languages:</strong>{' '}
-        {Object.values(languages)
-          .map((language: any) => language)
-          .join(', ')}
+    <div className="card mt-4">
+      <img src={flags.svg} className="card-img-top" alt={`${name.common} Flag`} style={{ height: '300px', objectFit: 'contain' }} />
+      <div className="card-body">
+        <h5 className="card-title text-center mb-4">{name.common}</h5>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item"><strong>Capital:</strong> {capital}</li>
+          <li className="list-group-item"><strong>Population:</strong> {population}</li>
+          <li className="list-group-item"><strong>Languages:</strong> {Object.values(languages).join(', ')}</li>
+        </ul>
       </div>
     </div>
   );
