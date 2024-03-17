@@ -1,44 +1,30 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+// CountryDetails.tsx
+import React from 'react';
 
-export default function Body(){
-    const [userLocation, setUserLocation] = useState<GeolocationPosition | null>(null);
-    const [countryData, setCountryData] = useState<any[]>([]);
+interface CountryDetailsProps {
+    country: any; // Replace 'any' with the type of your country details
+}
 
-    useEffect(() => {
-        if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            setUserLocation(position);
-            fetchCountryData();
-        });
-        } else {
-        console.log('Geolocation is not supported by this browser.');
-        }
-    }, []);
+const CountryDetails: React.FC<CountryDetailsProps> = ({ country }) => {
+    if (!country) {
+        return null;
+    }
 
-    const fetchCountryData = async () => {
-        try {
-            const response = await axios.get('https://restcountries.com/v3.1/all');
-            setCountryData(response.data);
-        } catch (error) {
-            console.error('Failed to fetch country data:', error);
-        }
-    };
+    const { name, capital, population, languages, flags } = country[0];
 
     return (
-        <div>
-        {userLocation && (
-            <p>
-            Your current latitude is {userLocation.coords.latitude} and longitude is {userLocation.coords.longitude}.
-            </p>
-        )}
-        <h2>Country Data</h2>
-        <ul>
-            {countryData.map((country: any, index) => (
-            <li key={index}>{country.name.common}</li>
-            ))}
-        </ul>
+        <div className="card mt-4">
+            <img src={flags.svg} className="card-img-top" alt={`${name.common} Flag`} style={{ height: '300px', objectFit: 'contain' }} />
+            <div className="card-body">
+                <h5 className="card-title text-center mb-4">{name.common}</h5>
+                <ul className="list-group list-group-flush">
+                <li className="list-group-item"><strong>Capital:</strong> {capital}</li>
+                <li className="list-group-item"><strong>Population:</strong> {population}</li>
+                <li className="list-group-item"><strong>Languages:</strong> {Object.values(languages).join(', ')}</li>
+                </ul>
+            </div>
         </div>
     );
 };
 
+export default CountryDetails;
