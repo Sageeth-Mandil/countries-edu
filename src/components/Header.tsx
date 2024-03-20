@@ -12,25 +12,25 @@ const Header: React.FC = () => {
 
     useEffect(() => {
         const fetchLocation = async () => {
-        try {
-            if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(async (position) => {
-                const { latitude, longitude } = position.coords;
-                const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
-                const data = await response.json();
-                const countryName = data.countryName;
-                setSearchQuery(countryName);
-                const countryDetails = await fetchCountryDetails(countryName);
-                setCountryDetails(countryDetails);
-                setLoading(false); // Set loading to false once data is fetched
-            });
-            } else {
-            console.error('Geolocation is not supported by this browser.');
+            try {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(async (position) => {
+                        const { latitude, longitude } = position.coords;
+                        const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+                        const data = await response.json();
+                        const countryName = data.countryName;
+                        setSearchQuery(countryName);
+                        const countryDetails = await fetchCountryDetails(countryName);
+                        setCountryDetails(countryDetails);
+                        setLoading(false); // Set loading to false once data is fetched
+                    });
+                } else {
+                    console.error('Geolocation is not supported by this browser.');
+                }
+            } catch (error) {
+                console.error('Error fetching location:', error);
+                setLoading(false); // Set loading to false if there's an error
             }
-        } catch (error) {
-            console.error('Error fetching location:', error);
-            setLoading(false); // Set loading to false if there's an error
-        }
         };
 
         fetchLocation();
